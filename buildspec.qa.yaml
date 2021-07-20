@@ -1,0 +1,33 @@
+version: 0.2
+
+env:
+  parameter-store:
+    TESTINGAPIUSERTOKEN: "/sps-qa/quickbase-kinesis-subscriber/api-user-token"
+    APIUSERTOKEN: "/sps-qa/quickbase-kinesis-subscriber/api-user-token"
+    QB_TABLE_ID: "bratdpgxu"
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+    commands:
+      - mkdir -p ~/.ssh
+      - pip install aws-sam-cli
+  build:
+    commands:
+      - echo Build started on `date`
+      - sleep 10
+      - sam build
+      - ls -al
+      - cd ../../..
+      - pwd
+
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - ls -al
+      - aws s3 cp #s3 was here
+      - aws lambda #function was here
+cache:
+  paths:
+    - "/root/.cache/pip/*"

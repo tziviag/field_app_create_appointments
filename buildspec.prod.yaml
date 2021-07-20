@@ -1,0 +1,31 @@
+version: 0.2
+
+env:
+  parameter-store:
+    TESTINGAPIUSERTOKEN: "/sps-qa/quickbase-kinesis-subscriber/api-user-token"
+#   IMPORTANT
+#   This variable (APIUSERTOKEN) is used in the app to do queries. In the buildspec, it will take this variable to run the test queries so it should NOT be the prod token.
+#   The real prod token is set in Terraform
+    APIUSERTOKEN: "/sps-qa/quickbase-kinesis-subscriber/api-user-token"
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+    commands:
+      - pip install aws-sam-cli
+  build:
+    commands:
+      - echo Build started on `date`
+      - sleep 10
+      - sam build
+      -
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - ls -al
+      - aws s3 cp #s3 was here
+      - aws lambda update-function-code --region us-east-1 --function-name #function was here
+cache:
+  paths:
+    - "/root/.cache/pip/*"
